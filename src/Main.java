@@ -31,7 +31,6 @@ public class Main {
             // System.out.println("We chose: " + doorChosen);
 
             // Gather up all the unchosen doors that have goats in them
-            int knownGoat = -1;
             ArrayList<Integer> remainingGoatDoors = new ArrayList<>();
             for (int j = 0; j < doorsAndContents.length; j++) {
                 // If we didn't choose it, and it == goat
