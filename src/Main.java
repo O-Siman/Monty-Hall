@@ -1,44 +1,56 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Main {
+    // Change these numbers!
+    static final int runs = 10000;
+    static final int doorCount = 3;
+    
+    // Code starts below
+
     static final Random random = new Random();
 
     public static void main(String[] args) {
-        int runs = 10000;
-        System.out.println("Switching: " + (double) gameLoop(runs, true) / runs);
-        System.out.println("Not switching: " + (double) gameLoop(runs, false) / runs);
+        System.out.println("Switching: " + (double) gameLoop(true) / runs);
+        System.out.println("Not switching: " + (double) gameLoop(false) / runs);
     }
 
-    public static int gameLoop(int runs, boolean shouldSwitch) {
+    public static int gameLoop(boolean shouldSwitch) {
         int wins = 0;
 
         // Game loop
         for (int i = 0; i < runs; i++) {
             // Randomize door contents
-            boolean[] doorsAndContents = new boolean[3];
-            int doorWithCar = random.nextInt(3);
+            // [false, true, false] means car is in door 2 (index 1)
+            boolean[] doorsAndContents = new boolean[doorCount];
+            int doorWithCar = random.nextInt(doorCount);
             doorsAndContents[doorWithCar] = true;
 
             // Player chooses a door
-            int doorChosen = random.nextInt(3);
+            int doorChosen = random.nextInt(doorCount);
             // System.out.println("We chose: " + doorChosen);
 
-            // Show the goat to the player
+            // Gather up all the unchosen doors that have goats in them
             int knownGoat = -1;
+            ArrayList<Integer> remainingGoatDoors = new ArrayList<>();
             for (int j = 0; j < doorsAndContents.length; j++) {
+                // If we didn't choose it, and it == goat
                 if ((doorChosen != j) && (doorsAndContents[j] == false)) {
-                    knownGoat = j;
-                    break; // Not really necessary though
+                    remainingGoatDoors.add(j);
                 }
             }
-
-            // System.out.println("Goat at: " + knownGoat);
+            
+            // Choose all but two of these randomly to be revealed to the player
+            ArrayList<Integer> knownGoats = new ArrayList<>();
+            for (int j = 0; j < doorCount - 2; j++) {
+                knownGoats.add(remainingGoatDoors.remove(random.nextInt(remainingGoatDoors.size())));
+            }
 
             // Switch doors if we need to
             if (shouldSwitch) {
                 for (int j = 0; j < doorsAndContents.length; j++) {
                     // Leftover door
-                    if ((j != doorChosen) && (j != knownGoat)) {
+                    if ((j != doorChosen) && (!knownGoats.contains(j))) {
                         // Switch doors
                         doorChosen = j;
                         break;
