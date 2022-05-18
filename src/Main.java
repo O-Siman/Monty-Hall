@@ -3,16 +3,16 @@ import java.util.Random;
 
 public class Main {
     // Change these numbers!
-    static final int runs = 10000;
-    static final int doorCount = 3;
+    static final int runs = 1000;
+    static final int doorCount = 4;
     
     // Code starts below
 
     static final Random random = new Random();
 
     public static void main(String[] args) {
-        System.out.println("Switching: " + (double) gameLoop(true) / runs);
-        System.out.println("Not switching: " + (double) gameLoop(false) / runs);
+        System.out.println("Switching: " + (((double) gameLoop(true) / runs) * 100) + "%");
+        System.out.println("Not switching: " + (((double) gameLoop(false) / runs) * 100) + "%");
     }
 
     public static int gameLoop(boolean shouldSwitch) {
